@@ -19,12 +19,11 @@ public class FilesSteps {
 
     @Given("I launch the Files app on iOS")
     public void launchFilesApp() throws MalformedURLException {
-        XCUITestOptions options = new XCUITestOptions()
-                .setDeviceName("iPhone 16e")
-                .setPlatformName("iOS")
-                // .setPlatformVersion("17.2")
-                .setAutomationName("XCUITest")
-                .setBundleId("com.apple.DocumentsApp"); // Files app Bundle ID
+        XCUITestOptions options = new XCUITestOptions();
+        options.setDeviceName("iPhone 16e");
+        options.setPlatformName("iOS");
+        options.setAutomationName("XCUITest");
+        options.setBundleId("com.apple.DocumentsApp");
         
         driver = new IOSDriver(new URL("http://127.0.0.1:4723/"), options);
         filesPage = new FilesPageAppium(driver);
