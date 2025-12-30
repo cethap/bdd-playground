@@ -34,7 +34,7 @@ public class SearchSteps {
             appiumDriver = new AndroidDriver(new URL("http://127.0.0.1:4723/"), options);
         } else if (platform.equalsIgnoreCase("iOS")) {
             XCUITestOptions options = new XCUITestOptions()
-                    .setDeviceName("iPhone Simulator")
+                    .setDeviceName("iPhone 17 Pro Max")
                     .setPlatformName("iOS")
                     .setAutomationName("XCUITest")
                     .withBrowserName("Safari"); // Use mobile safari
@@ -42,7 +42,7 @@ public class SearchSteps {
         } else {
             throw new IllegalArgumentException("Unsupported platform: " + platform);
         }
-        
+
         SearchPageAppium searchPage = new SearchPageAppium(appiumDriver);
         searchPage.gotoPage();
     }
