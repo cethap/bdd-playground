@@ -2,26 +2,26 @@ package pages;
 
 import com.microsoft.playwright.Page;
 import java.util.regex.Pattern;
+import utils.BasePagePlaywright;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
-public class SearchPagePlaywright {
-    private final Page page;
+public class SearchPagePlaywright extends BasePagePlaywright {
     private final String baseUrl = "https://sauce-demo.myshopify.com/";
     private final String searchInput = "input[name='q']";
 
     public SearchPagePlaywright(Page page) {
-        this.page = page;
+        super(page);
     }
 
     public void gotoPage() {
-        page.navigate(baseUrl);
+        navigate(baseUrl);
     }
 
     public void searchFor(String term) {
-        page.navigate(baseUrl + "/search");
-        page.fill(searchInput, term);
-        page.press(searchInput, "Enter");
+        navigate(baseUrl + "/search");
+        fill(searchInput, term);
+        press(searchInput, "Enter");
     }
 
     public void verifyTitle(String text) {

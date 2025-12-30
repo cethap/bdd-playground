@@ -1,22 +1,22 @@
 import { Page, expect } from '@playwright/test';
+import { BasePage } from '../utils/BasePage';
 
-export class SearchPage {
-    readonly page: Page;
+export class SearchPage extends BasePage {
     readonly searchInput = "input[name='q']";
     readonly baseUrl = 'https://sauce-demo.myshopify.com/';
 
     constructor(page: Page) {
-        this.page = page;
+        super(page);
     }
 
     async goto() {
-        await this.page.goto(this.baseUrl);
+        await this.navigate(this.baseUrl);
     }
 
     async searchFor(term: string) {
-        await this.page.goto(this.baseUrl + '/search');
-        await this.page.fill(this.searchInput, term);
-        await this.page.press(this.searchInput, 'Enter');
+        await this.navigate(this.baseUrl + '/search');
+        await this.fill(this.searchInput, term);
+        await this.press(this.searchInput, 'Enter');
     }
 
     async verifyTitle(text: string) {

@@ -1,16 +1,18 @@
 /// <reference types="cypress" />
 
-export class SearchPage {
+import { BasePage } from "../utils/BasePage";
+
+export class SearchPage extends BasePage {
     private readonly baseUrl = "https://sauce-demo.myshopify.com/";
     private readonly searchInput = "input[name='q']";
 
     visit() {
-        cy.visit(this.baseUrl);
+        super.visit(this.baseUrl);
     }
 
     searchFor(term: string) {
-        cy.visit(this.baseUrl + "/search");
-        cy.get(this.searchInput).type(term + "{enter}");
+        super.visit(this.baseUrl + "/search");
+        this.type(this.searchInput, term + "{enter}");
     }
 
     verifyTitle(text: string) {
