@@ -10,7 +10,7 @@ export default defineConfig({
   testDir,
   reporter: 'html',
   use: {
-    headless: false,
+    headless: !!process.env.CI,
     screenshot: 'on',
     trace: 'on',
   },

@@ -88,6 +88,4 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           working-directory: ./ts-cypress-bdd
-          start: npm start
-          wait-on: '' # Empty since we are testing external site
           browser: chrome

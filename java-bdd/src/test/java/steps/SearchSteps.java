@@ -44,7 +44,9 @@ public class SearchSteps {
     @Given("I open Sauce Demo using Selenium")
     public void openSauceSelenium() {
         // Using main page
-        driver = new ChromeDriver();
+        org.openqa.selenium.chrome.ChromeOptions options = new org.openqa.selenium.chrome.ChromeOptions();
+        options.addArguments("--headless=new");
+        driver = new ChromeDriver(options);
         driver.get("https://sauce-demo.myshopify.com/");
     }
 
@@ -77,7 +79,7 @@ public class SearchSteps {
     @Given("I open Sauce Demo using Playwright")
     public void openSaucePlaywright() {
         playwright = Playwright.create();
-        browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false));
+        browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(true));
         page = browser.newPage();
         page.navigate("https://sauce-demo.myshopify.com/");
     }
