@@ -1,16 +1,20 @@
 import { createBdd } from 'playwright-bdd';
 import { test } from '@playwright/test';
+import { SearchPage } from './pages/SearchPage';
 
 const { Given, When, Then } = createBdd();
 
 Given('I open Sauce Demo', async ({ page }) => {
-    await page.goto('https://sauce-demo.myshopify.com/');
+    const searchPage = new SearchPage(page);
+    await searchPage.goto();
 });
 
 When('I search for {string}', async ({ page }, term: string) => {
-    await page.goto(`https://sauce-demo.myshopify.com/search?q=${term}`);
+    const searchPage = new SearchPage(page);
+    await searchPage.searchFor(term);
 });
 
 Then('the title should contain {string}', async ({ page }, text: string) => {
-    await test.expect(page).toHaveTitle(new RegExp(text));
+    const searchPage = new SearchPage(page);
+    await searchPage.verifyTitle(text);
 });

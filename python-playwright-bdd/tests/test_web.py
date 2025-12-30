@@ -1,7 +1,7 @@
 import pytest
-import re
 from pytest_bdd import scenario, given, when, then, parsers
-from playwright.sync_api import Page, expect
+from playwright.sync_api import Page
+from pages.search_page import SearchPage
 
 @scenario('../features/web.feature', 'Search for a product')
 def test_search_product():
@@ -9,15 +9,15 @@ def test_search_product():
 
 @given("I open Sauce Demo")
 def open_sauce(page: Page):
-    page.goto("https://sauce-demo.myshopify.com/")
+    search_page = SearchPage(page)
+    search_page.goto()
 
 @when(parsers.parse('I search for "{term}"'))
 def search_product(page: Page, term: str):
-    page.goto(f"https://sauce-demo.myshopify.com/search?q={term}")
-    # Alternatively verify input 
-    # page.locator("input[name='q']").fill(term)
-    # page.keyboard.press("Enter")
+    search_page = SearchPage(page)
+    search_page.search_for(term)
 
 @then(parsers.parse('the title should contain "{text}"'))
 def verify_title(page: Page, text: str):
-    expect(page).to_have_title(re.compile(text))
+    search_page = SearchPage(page)
+    search_page.verify_title(text)

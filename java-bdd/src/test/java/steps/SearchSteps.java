@@ -1,5 +1,8 @@
 package steps;
 
+import pages.SearchPagePlaywright;
+import pages.SearchPageSelenium;
+
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
@@ -8,17 +11,9 @@ import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import com.microsoft.playwright.*;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.Duration;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SearchSteps {
@@ -47,30 +42,20 @@ public class SearchSteps {
         org.openqa.selenium.chrome.ChromeOptions options = new org.openqa.selenium.chrome.ChromeOptions();
         options.addArguments("--headless=new");
         driver = new ChromeDriver(options);
-        driver.get("https://sauce-demo.myshopify.com/");
+        SearchPageSelenium searchPage = new SearchPageSelenium(driver);
+        searchPage.gotoPage();
     }
 
     @When("I search for {string} using Selenium")
     public void searchSelenium(String query) {
-        // Find search button/link or input. 
-        // Based on analysis, let's go to /search page to be safe or try to find an input.
-        // Direct navigation to search is safer for automation stability in this demo.
-        driver.get("https://sauce-demo.myshopify.com/search");
-        
-        // Shopify search input usually has name='q'
-        WebElement searchBox = new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.presenceOfElementLocated(By.name("q")));
-                
-        searchBox.clear();
-        searchBox.sendKeys(query);
-        searchBox.sendKeys(Keys.RETURN);
+        SearchPageSelenium searchPage = new SearchPageSelenium(driver);
+        searchPage.searchFor(query);
     }
 
     @Then("the title should contain {string} using Selenium")
     public void checkTitleSelenium(String query) {
-        new WebDriverWait(driver, Duration.ofSeconds(5))
-                .until(ExpectedConditions.titleContains(query));
-        assertTrue(driver.getTitle().contains(query));
+        SearchPageSelenium searchPage = new SearchPageSelenium(driver);
+        searchPage.verifyTitle(query);
         driver.quit();
     }
 
@@ -81,22 +66,20 @@ public class SearchSteps {
         playwright = Playwright.create();
         browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(true));
         page = browser.newPage();
-        page.navigate("https://sauce-demo.myshopify.com/");
+        SearchPagePlaywright searchPage = new SearchPagePlaywright(page);
+        searchPage.gotoPage();
     }
 
     @When("I search for {string} using Playwright")
     public void searchPlaywright(String query) {
-        page.navigate("https://sauce-demo.myshopify.com/search");
-        page.fill("input[name='q']", query);
-        page.press("input[name='q']", "Enter");
+        SearchPagePlaywright searchPage = new SearchPagePlaywright(page);
+        searchPage.searchFor(query);
     }
 
     @Then("the title should contain {string} using Playwright")
     public void checkTitlePlaywright(String query) {
-        page.waitForTimeout(2000); 
-        String title = page.title();
-        // Since the title might be "Search: 1 result for ..." or just "Sauce Demo", we check what's passed
-        assertTrue(title.contains(query));
+        SearchPagePlaywright searchPage = new SearchPagePlaywright(page);
+        searchPage.verifyTitle(query);
         browser.close();
         playwright.close();
     }
